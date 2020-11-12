@@ -1,5 +1,7 @@
 const express = require('express');
 
+const productsRouter = require('./products');
+
 const router = express.Router();
 
 router.get('/', (req, res) => {
@@ -7,5 +9,7 @@ router.get('/', (req, res) => {
     message: 'API - 👋🌎🌍🌏',
   });
 });
+
+router.use('/products', productsRouter);
 
 module.exports = router;
