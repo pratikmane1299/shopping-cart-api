@@ -4,6 +4,26 @@ const db = require('../db');
 
 const router = express.Router();
 
+router.get('/:userId', async (req, res) => {
+  // TODO: get userId from logged in user
+  const { userId } = req.params;
+
+  const cart = await db
+    .select(
+      'products.id',
+      'products.name',
+      'products.image_url',
+      'products.price',
+      // eslint-disable-next-line comma-dangle
+      'cart.quantity'
+    )
+    .from('cart')
+    .join('products', 'products.id', 'cart.product_id')
+    .where('cart.user_id', userId);
+
+  res.json(cart);
+});
+
 // eslint-disable-next-line consistent-return
 router.post('/add-to-cart', async (req, res, next) => {
   // TODO: get userId from logged in user
