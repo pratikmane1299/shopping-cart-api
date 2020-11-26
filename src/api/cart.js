@@ -71,4 +71,62 @@ router.post('/add-to-cart', async (req, res, next) => {
   }
 });
 
+router.put('/increase-qty', async (req, res, next) => {
+  const { userId, productId } = req.body;
+  try {
+    await db('cart')
+      .where('user_id', userId)
+      .andWhere('product_id', productId)
+      .increment('quantity', 1);
+
+    const updatedProduct = await db
+      .select(
+        'products.id',
+        'products.name',
+        'products.image_url',
+        'products.price',
+        // eslint-disable-next-line comma-dangle
+        'cart.quantity'
+      )
+      .from('cart')
+      .join('products', 'products.id', 'cart.product_id')
+      .where('user_id', userId)
+      .andWhere('product_id', productId)
+      .first();
+
+    res.json(updatedProduct);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put('/decrease-qty', async (req, res, next) => {
+  const { userId, productId } = req.body;
+  try {
+    await db('cart')
+      .where('user_id', userId)
+      .andWhere('product_id', productId)
+      .decrement('quantity', 1);
+
+    const updatedProduct = await db
+      .select(
+        'products.id',
+        'products.name',
+        'products.image_url',
+        'products.price',
+        // eslint-disable-next-line comma-dangle
+        'cart.quantity'
+      )
+      .from('cart')
+      .join('products', 'products.id', 'cart.product_id')
+      .where('user_id', userId)
+      .andWhere('product_id', productId)
+      .first();
+
+    res.json(updatedProduct);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
