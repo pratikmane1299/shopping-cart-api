@@ -129,4 +129,19 @@ router.put('/decrease-qty', async (req, res, next) => {
   }
 });
 
+router.delete('/delete-item', async (req, res, next) => {
+  const { userId, productId } = req.body;
+
+  try {
+    await db('cart')
+      .del()
+      .where('user_id', userId)
+      .andWhere('product_id', productId);
+
+    res.json({ id: productId });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
