@@ -1,5 +1,9 @@
 /* eslint-disable arrow-body-style */
-const BASE_URL = `http://localhost:${process.env.PORT}/images`;
+const isProduction = process.env.NODE_ENV === 'production';
+
+const BASE_URL = isProduction
+  ? 'https://redux-shopping-cart-api.herokuapp.com/images'
+  : `http://localhost:${process.env.PORT}/images`;
 
 const products = [
   {
