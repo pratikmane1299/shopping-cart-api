@@ -4,9 +4,11 @@ const db = require('../db');
 
 const router = express.Router();
 
-router.get('/:userId', async (req, res) => {
+router.get('/', async (req, res) => {
   // TODO: get userId from logged in user
-  const { userId } = req.params;
+  // const { userId } = req.params;
+
+  const userId = req.user.id;
 
   const cart = await db
     .select(
@@ -27,7 +29,9 @@ router.get('/:userId', async (req, res) => {
 // eslint-disable-next-line consistent-return
 router.post('/add-to-cart', async (req, res, next) => {
   // TODO: get userId from logged in user
-  const { userId, productId } = req.body;
+  const { productId } = req.body;
+
+  const userId = req.user.id;
 
   try {
     const productInCart = await db
@@ -72,7 +76,10 @@ router.post('/add-to-cart', async (req, res, next) => {
 });
 
 router.put('/increase-qty', async (req, res, next) => {
-  const { userId, productId } = req.body;
+  const { productId } = req.body;
+
+  const userId = req.user.id;
+
   try {
     await db('cart')
       .where('user_id', userId)
@@ -101,7 +108,10 @@ router.put('/increase-qty', async (req, res, next) => {
 });
 
 router.put('/decrease-qty', async (req, res, next) => {
-  const { userId, productId } = req.body;
+  const { productId } = req.body;
+
+  const userId = req.user.id;
+
   try {
     await db('cart')
       .where('user_id', userId)
@@ -130,7 +140,9 @@ router.put('/decrease-qty', async (req, res, next) => {
 });
 
 router.delete('/delete-item', async (req, res, next) => {
-  const { userId, productId } = req.body;
+  const { productId } = req.body;
+
+  const userId = req.user.id;
 
   try {
     await db('cart')
